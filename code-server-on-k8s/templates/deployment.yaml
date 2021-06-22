@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: code-server-{{ .Values.user }}
+  name: {{ .Values.name }}
   namespace: {{ .Values.namespace }}
 spec:
   selector:
     matchLabels:
-      app: code-server-{{ .Values.user }}
+      app: {{ .Values.name }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: code-server-{{ .Values.user }}
+        app: {{ .Values.name }}
     spec:
-      serviceAccountName: code-server-{{ .Values.user }}
+      serviceAccountName: {{ .Values.name }}
       automountServiceAccountToken: true
       containers:
       - name: code-server
-        image: gashirar/code-server-on-k8s:latest
+        image: {{ .Values.deployment.image }}
         ports:
-        - containerPort: 8080
+        - containerPort: {{ .Values.deployment.port }}
           name: code-server
         securityContext:
           privileged: true
@@ -27,10 +27,10 @@ spec:
         - name: PASSWORD
           valueFrom:
             secretKeyRef:
-              name: code-server-{{ .Values.user }}
+              name: {{ .Values.name }}-secret
               key: password
         resources:
           limits:
-            memory: 1Gi
+            memory: 2Gi
           requests:
-            memory: 1Gi
+            memory: 2Gi

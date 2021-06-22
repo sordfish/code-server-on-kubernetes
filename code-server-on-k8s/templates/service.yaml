@@ -1,20 +1,15 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: code-server-{{ .Values.user }}
+  name: {{ .Values.name }}-service
   namespace: {{ .Values.namespace }}
 spec:
-  type: LoadBalancer
-  {{- if empty .Values.loadBalancerSourceRanges }}
-  {{- fail "A valid .Values.loadBalancerSourceRanges entry required!" }}
-  {{- end }}
-  loadBalancerSourceRanges:
-  {{- toYaml .Values.loadBalancerSourceRanges | nindent 2 }}
+  type: {{ .Values.service.type }}
   selector:
-    app: code-server-{{ .Values.user }}
+    app: {{ .Values.name }}
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: code-server
-    name: code-server-{{ .Values.user }}
+    port: 8080
+    targetPort: 8080
+    name: {{ .Values.name }}
 

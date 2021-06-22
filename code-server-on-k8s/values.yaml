@@ -1,5 +1,7 @@
 # Default Values
 
+name: "code-server"
+
 # Kubernetes namespace
 namespace: "code-server"
 
@@ -8,8 +10,12 @@ user: "user"
 # Basic Authentication Password
 password: "P@ssw0rd"
 
-# IP whitelist
-loadBalancerSourceRanges: [] 
-
 # Ingress Hostname
-host: code-server.dev
+host: code.k8s.space
+
+service:
+  type: ClusterIP
+
+deployment:
+  image: linuxserver/code-server:version-v3.10.2
+  port: 8080
